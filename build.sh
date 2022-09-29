@@ -35,7 +35,6 @@ function cmd_execute() {
 
 function cmd_build() {
     docker build --cache-from metriclite/metriclite:dev -t metriclite/metriclite:dev .
-    
 }
 
 function cmd_docker() {
