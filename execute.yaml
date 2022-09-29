@@ -1,0 +1,39 @@
+steps:
+
+  - id: 'TRANSIENT_KANBANIZE'
+    waitFor: [ '-' ]
+    name: 'gcr.io/$PROJECT_ID/metriclite:latest'
+    dir: '/opt/metriclite'
+    args: ['./transient/transient.sh', 'update']
+    secretEnv: [ 'KANBANIZE_KEY' ]
+  
+  - id: 'RAW_KANBANIZE'
+    waitFor: [ 'TRANSIENT_KANBANIZE' ]
+    name: 'gcr.io/$PROJECT_ID/metriclite:latest'
+    args: ['/opt/metriclite/create.sh', 'table', 'raw/RAW_KANBANIZE']
+
+  - id: 'TRUSTED_KANBANIZE'
+    waitFor: [ 'RAW_KANBANIZE' ]
+    name: 'gcr.io/$PROJECT_ID/metriclite:latest'
+    args: ['/opt/metriclite/create.sh', 'table', 'trusted/TRUSTED_KANBANIZE']
+
+  - id: 'TRUSTED_EPIC'
+    waitFor: [ 'TRUSTED_KANBANIZE' ]
+    name: 'gcr.io/$PROJECT_ID/metriclite:latest'
+    args: ['/opt/metriclite/create.sh', 'table', 'trusted/TRUSTED_EPIC']
+
+  - id: 'TRUSTED_STORY'
+    waitFor: [ 'TRUSTED_KANBANIZE' ]
+    name: 'gcr.io/$PROJECT_ID/metriclite:latest'
+    args: ['/opt/metriclite/create.sh', 'table', 'trusted/TRUSTED_STORY']
+
+  - id: 'TRUSTED_SMALL_BATCH'
+    waitFor: [ 'TRUSTED_KANBANIZE' ]
+    name: 'gcr.io/$PROJECT_ID/metriclite:latest'
+    args: ['/opt/metriclite/create.sh', 'table', 'trusted/TRUSTED_SMALL_BATCH']
+
+availableSecrets:
+  secretManager:
+  - versionName: projects/$PROJECT_ID/secrets/kanbanize-key/versions/latest
+    env: KANBANIZE_KEY
+  

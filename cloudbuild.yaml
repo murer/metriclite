@@ -1,0 +1,14 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    entrypoint: './build.sh'
+    args: [ 'docker' ]
+  
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: './build.sh'
+    args: [ 'execute', '--async' ]
+
+options:
+  env:
+  - 'METRICLITE_PROJECT_NAME=$PROJECT_ID'
+
+timeout: 600s

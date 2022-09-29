@@ -1,0 +1,2 @@
+-- SELECT COUNT(0) = 0 FROM metriclite.TMP_RAW_KANBANIZE where ARRAY_LENGTH(Parents) > 1
+SELECT COUNT(0) > 10 FROM metriclite.RAW_KANBANIZE
