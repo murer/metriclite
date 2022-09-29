@@ -4,6 +4,10 @@ function cmd_deploy() {
     gcloud builds submit . --region us-east1
 }
 
+function cmd_poc1() {
+    git log master --name-only --pretty=format:'commit: %H %nsubject: %s %nauthor: %aN %nemail: %aE %ndate: %at%nparents: %P%nRefs: %D'
+}
+
 function cmd_poc2() {
     bq mk \
         --use_legacy_sql=false \
