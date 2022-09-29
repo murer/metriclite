@@ -5,7 +5,9 @@ function cmd_deploy() {
 }
 
 function cmd_poc1() {
-    git log master --name-only --pretty=format:'commit: %H %nsubject: %s %nauthor: %aN %nemail: %aE %ndate: %at%nparents: %P%nRefs: %D'
+    # --name-only
+    #git log --all  --pretty=format:'commit: %H %nsubject: %s %nauthor: %aN %nemail: %aE %ndate: %at%nparents: %P%nRefs: %D'
+    git log --all  --pretty=format:'METRICLITEQUOTE%HMETRICLITEQUOTE,METRICLITEQUOTE%sMETRICLITEQUOTE,%aN-METRICLITEQUOTE%aE-METRICLITEQUOTE%at-METRICLITEQUOTE%P-METRICLITEQUOTE%D'
 }
 
 function cmd_poc2() {
