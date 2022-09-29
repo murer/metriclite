@@ -59,10 +59,9 @@ function cmd_trigger_ci_delete() {
 
 function cmd_trigger_ci_create() {
     cmd_trigger_ci_delete
-    gcloud beta builds triggers create github --region us-east1 \
+    gcloud beta builds triggers create cloud-source-repositories --region us-east1 \
         --name metriclite-ci --build-config=cloudbuild.yaml \
-        --repo-owner murer --repo-name metriclite \
-        --branch-pattern '^master$'
+        --repo metriclite --branch-pattern '^master$'
 }
 
 function cmd_trigger_execute_delete() {
