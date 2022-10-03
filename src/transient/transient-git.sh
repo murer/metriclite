@@ -38,7 +38,7 @@ function cmd_convert_files() {
     # done
     # set -x
     git log --name-status --all '--pretty=format:ID%x09%H' | \
-        grep '.\+' | grep -n '.*' \
+        grep '.\+' | grep -n '.*' | \
         sed 's/:/,/1' | \
         sed 's/\t/,/1' >> "../../../target/git/files-$metriclite_gitname.csv"
     gzip -f "../../../target/git/files-$metriclite_gitname.csv"
