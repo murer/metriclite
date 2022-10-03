@@ -8,12 +8,16 @@ function cmd_download() {
     git clone "$metriclite_giturl" "target/git/$metriclite_gitname"
 }
 
-function cmd_convert() {
+function cmd_convert_commits() {
     local metriclite_gitname="${1?'metriclite_gitname'}"
     cd "target/git/$metriclite_gitname"
     # git log --all --pretty=format:'commit: %H %nsubject: %s %nauthor: %aN %nemail: %aE %ndate: %at%nparents: %P%nRefs: %D'
-    local gitcols='%H %at %P %D %aN %aE %s'
-    git log --all "--pretty=format:$gitcols" | sed 's/"/""/g'
+    local gitcols='%H,%at,%P,%D,%aN,%aE,%s'
+    local gitsepcols="$(echo -n "$gitcols" | sed 's/,/__METRICLITESEP__/g')"
+    git log --all "--pretty=format:$gitsepcols" | \
+        sed 's/"/""/g' | \
+        sed 's/__METRICLITESEP__/","/g' | \
+        sed 's/^/"/g' | sed 's/$/"/g'
     cd -
 }
 
@@ -29,6 +33,7 @@ function cmd_upload() {
 
 function cmd_update() {
     cmd_download
+    cmd_convert_commits
     #cmd_upload
 }
 
