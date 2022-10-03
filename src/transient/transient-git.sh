@@ -17,24 +17,28 @@ function cmd_convert_commits() {
     git log --all "--pretty=format:$gitsepcols" | \
         sed 's/"/""/g' | \
         sed 's/__METRICLITESEP__/","/g' | \
-        sed 's/^/"/g' | sed 's/$/"/g'
+        sed 's/^/"/g' | sed 's/$/"/g' | \
+        gzip > "../../../target/git/$metriclite_gitname.csv.gz"
     cd -
 }
 
 function cmd_upload() {
+    local metriclite_gitname="${1?'metriclite_gitname'}"
     bq load --source_format CSV \
         --skip_leading_rows 1 \
         --replace \
         --allow_quoted_newlines \
         --sync \
         --autodetect \
-        metriclite.TRANSIENT_KANBANIZE target/export.csv.gz
+        "metriclite.TRANSIENT_GIT_$metriclite_gitname" "target/git/$metriclite_gitname.csv.gz"
 }
 
 function cmd_update() {
-    cmd_download
-    cmd_convert_commits
-    #cmd_upload
+    local metriclite_gitname="${1?'metriclite_gitname'}"
+    local metriclite_giturl="${2?'metriclite_giturl'}"
+    cmd_download "$metriclite_gitname" "$metriclite_giturl"
+    cmd_convert_commits "$metriclite_gitname"
+    cmd_upload "$metriclite_gitname"
 }
 
 cd "$(dirname "$0")"; _cmd="${1?"cmd is required"}"; shift; "cmd_${_cmd}" "$@"
