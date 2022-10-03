@@ -13,12 +13,13 @@ function cmd_convert_commits() {
     cd "target/git/$metriclite_gitname"
     # git log --all --pretty=format:'commit: %H %nsubject: %s %nauthor: %aN %nemail: %aE %ndate: %at%nparents: %P%nRefs: %D'
     local gitcols='%H,%at,%P,%D,%aN,%aE,%s'
+    echo "$gitcols" | tr -d '%' > "../../../target/git/$metriclite_gitname.csv"
     local gitsepcols="$(echo -n "$gitcols" | sed 's/,/__METRICLITESEP__/g')"
     git log --all "--pretty=format:$gitsepcols" | \
         sed 's/"/""/g' | \
         sed 's/__METRICLITESEP__/","/g' | \
-        sed 's/^/"/g' | sed 's/$/"/g' | \
-        gzip > "../../../target/git/$metriclite_gitname.csv.gz"
+        sed 's/^/"/g' | sed 's/$/"/g' >> "../../../target/git/$metriclite_gitname.csv"
+    gzip -f "../../../target/git/$metriclite_gitname.csv"
     cd -
 }
 
