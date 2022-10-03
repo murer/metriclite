@@ -6,7 +6,19 @@ steps:
     dir: '/opt/metriclite'
     args: ['./transient/transient.sh', 'update']
     secretEnv: [ 'KANBANIZE_KEY' ]
-  
+
+  - id: 'TRANSIENT_GIT_HEXBLADE'
+    waitFor: [ '-' ]
+    name: 'gcr.io/$PROJECT_ID/metriclite:latest'
+    dir: '/opt/metriclite'
+    args: ['./transient/transient-git.sh', 'update', 'HEXBLADE', 'https://github.com/murer/hexblade' ]
+    secretEnv: [ 'KANBANIZE_KEY' ]
+
+  - id: 'RAW_GIT_HEXBLADE_FILES'
+    waitFor: [ 'TRANSIENT_GIT_HEXBLADE' ]
+    name: 'gcr.io/$PROJECT_ID/metriclite:latest'
+    args: ['/opt/metriclite/create.sh', 'table', 'raw/RAW_GIT_HEXBLADE_FILES']
+
   - id: 'RAW_KANBANIZE'
     waitFor: [ 'TRANSIENT_KANBANIZE' ]
     name: 'gcr.io/$PROJECT_ID/metriclite:latest'
