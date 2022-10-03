@@ -14,11 +14,11 @@ function cmd_convert_commits() {
     # git log --all --pretty=format:'commit: %H %nsubject: %s %nauthor: %aN %nemail: %aE %ndate: %at%nparents: %P%nRefs: %D'
     local gitcols='%H,%at,%P,%D,%aN,%aE,%s'
     echo "$gitcols" | tr -d '%' > "../../../target/git/$metriclite_gitname.csv"
-    local gitsepcols="$(echo -n "$gitcols" | sed 's/,/__METRICLITESEP__/g')"
+    local gitsepcols="$(echo -n "__METRICLITEINIT__${gitcols}__METRICLITEINIT__" | sed 's/,/__METRICLITESEP__/g')"
     git log --all "--pretty=format:$gitsepcols" | \
         sed 's/"/""/g' | \
         sed 's/__METRICLITESEP__/","/g' | \
-        sed 's/^/"/g' | sed 's/$/"/g' >> "../../../target/git/$metriclite_gitname.csv"
+        sed 's/__METRICLITEINIT__/"/g' >> "../../../target/git/$metriclite_gitname.csv"
     gzip -f "../../../target/git/$metriclite_gitname.csv"
     cd -
 }
