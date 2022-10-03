@@ -12,10 +12,10 @@ function cmd_convert_commits() {
     local metriclite_gitname="${1?'metriclite_gitname'}"
     cd "target/git/$metriclite_gitname"
     # git log --all --pretty=format:'commit: %H %nsubject: %s %nauthor: %aN %nemail: %aE %ndate: %at%nparents: %P%nRefs: %D'
-    local gitcols='%H,%at,%P,%D,%aN,%aE,%s'
+    local gitcols='%H,%at,%P,%D,%aN,%aE,%N'
     echo "$gitcols" | tr -d '%' > "../../../target/git/$metriclite_gitname.csv"
     local gitsepcols="$(echo -n "__METRICLITEINIT__${gitcols}__METRICLITEINIT__" | sed 's/,/__METRICLITESEP__/g')"
-    git log --all "--pretty=format:$gitsepcols" | \
+    git log --name-only --all "--pretty=format:$gitsepcols" | \
         sed 's/"/""/g' | \
         sed 's/__METRICLITESEP__/","/g' | \
         sed 's/__METRICLITEINIT__/"/g' >> "../../../target/git/$metriclite_gitname.csv"
