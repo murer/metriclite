@@ -13,7 +13,7 @@ function cmd_convert() {
     cd "target/git/$metriclite_gitname"
     # git log --all --pretty=format:'commit: %H %nsubject: %s %nauthor: %aN %nemail: %aE %ndate: %at%nparents: %P%nRefs: %D'
     local gitcols='%H %at %P %D %aN %aE %s'
-    git log --all "--pretty=format:$gitcols"
+    git log --all "--pretty=format:$gitcols" | sed 's/"/""/g'
     cd -
 }
 
